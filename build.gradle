@@ -1,0 +1,56 @@
+group 'com.jy'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'war'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    //导入本地的依赖包
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile(
+            'commons-lang:commons-lang:2.6',
+            'commons-logging:commons-logging-api:1.0.4',
+            'commons-io:commons-io:2.4',
+            'commons-fileupload:commons-fileupload:1.2.1',
+            'commons-collections:commons-collections:3.1',
+            'org.springframework:spring-context:3.2.8.RELEASE',
+            'org.springframework:spring-context-support:3.2.2.RELEASE',
+            'org.springframework:spring-tx:3.2.8.RELEASE',
+            'org.springframework:spring-web:3.2.8.RELEASE',
+            'org.springframework:spring-webmvc:3.2.8.RELEASE',
+            'org.springframework:spring-jdbc:3.2.8.RELEASE',
+            'org.springframework:spring-beans:3.2.8.RELEASE',
+            'org.springframework:spring-test:3.2.8.RELEASE',
+            'org.springframework:spring-aop:3.2.8.RELEASE',
+            'org.aspectj:aspectjweaver:1.8.1',
+            'com.alibaba:fastjson:1.1.37',
+            'com.alibaba:druid:1.0.7',
+            'org.codehaus.jackson:jackson-core-asl:1.9.2',
+            'org.codehaus.jackson:jackson-mapper-asl:1.9.2',
+            "redis.clients:jedis:2.4.2",
+            "org.springframework.data:spring-data-redis:1.2.0.RELEASE",
+            "log4j:log4j:1.2.17",
+            'org.slf4j:slf4j-api:1.7.12',
+            'org.slf4j:jcl-over-slf4j:1.6.6',
+            'org.slf4j:slf4j-log4j12:1.6.6',
+            'mysql:mysql-connector-java:5.1.18',
+            'org.mybatis:mybatis:3.2.6',
+            'org.mybatis:mybatis-spring:1.2.2',
+            'org.mybatis:mybatis-ehcache:1.0.0',
+            'net.sf.ehcache:ehcache-core:2.6.6',
+            'asm:asm:3.3.1',
+            'org.apache.commons:commons-pool2:2.0',
+            'jstl:jstl:1.1.2',
+            'taglibs:standard:1.1.2'
+    )
+}
