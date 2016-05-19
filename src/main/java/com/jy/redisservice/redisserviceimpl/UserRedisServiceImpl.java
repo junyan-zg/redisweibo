@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.SortParameters;
 import org.springframework.data.redis.core.BulkMapper;
 import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.data.redis.core.query.SortQueryBuilder;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,11 @@ public class UserRedisServiceImpl implements UserRedisService{
         }else{
             return null;
         }
+    }
+
+    @Override
+    public List<Post> getPosts(Long userid) {
+        return null;
     }
 
     @Override
@@ -92,5 +98,44 @@ public class UserRedisServiceImpl implements UserRedisService{
             }
         };
         redisDao.getRedisTemplate().execute(sessionCallback);
+    }
+
+    @Override
+    public Boolean isMyCatch(Long myuserid, Long catcherId) {
+        return redisDao.getRedisTemplate().opsForSet().isMember("following:"+myuserid,catcherId+"");
+    }
+
+    @Override
+    public void addCatch(final Long myuserid,final Long catcherId) {
+        SessionCallback sessionCallback = new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations operations) throws DataAccessException {
+                operations.multi();
+                operations.opsForSet().add("following:"+myuserid,catcherId+"");//我的关注列表
+                operations.opsForSet().add("follower:"+catcherId,myuserid+"");//对方的被关注列表
+                operations.exec();
+                return null;
+            }
+        };
+        redisDao.getRedisTemplate().execute(sessionCallback);
+    }
+
+    @Override
+    public void removeCatch(final Long myuserid,final Long catcherId) {
+        SessionCallback sessionCallback = new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations operations) throws DataAccessException {
+                operations.multi();
+                operations.opsForSet().remove("following:"+myuserid,catcherId+"");//我的关注列表
+                operations.opsForSet().remove("follower:"+catcherId,myuserid+"");//对方的被关注列表
+                operations.exec();
+                return null;
+            }
+        };
+        redisDao.getRedisTemplate().execute(sessionCallback);
+    }
+    @Override
+    public RedisTemplate getRedisTemplate(){
+        return redisDao.getRedisTemplate();
     }
 }
